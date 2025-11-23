@@ -7,14 +7,14 @@ if [ -z $1 ]; then
     PASSWORD_LENGTH=16
 
     # Generate a random password (alphanumeric).
-    PASS=$(cat /dev/urandom | tr -dc '[:alnum:]' | fold -w ${PASSWORD_LENGTH} | head -n1)
+    PASS=$(cat /dev/random | tr -dc '[:alnum:]' | fold -w ${PASSWORD_LENGTH} | head -n1)
 else
     PASS=$1
 fi
 
 # Generate a random salt (alphanumeric + two special characters).
 # Source: https://github.com/transmission/transmission/blob/master/libtransmission/crypto-utils.c#L132-L136
-SALT=$(cat /dev/urandom | tr -dc '[:alnum:]./' | fold -w 8 | head -n1)
+SALT=$(cat /dev/random | tr -dc '[:alnum:]./' | fold -w 8 | head -n1)
 
 # Combine password + salt and use sha1sum to create the hash.
 HASH=$(echo -n ${PASS}${SALT} | sha1sum | awk '{print $1}')
